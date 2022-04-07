@@ -43,14 +43,20 @@ The NodeJS application will be hosted in Azure App Service, which supports hosti
 | The region of choice is West Europe.  | The regional pairing of West Europe (Netherland) with North Europe (Ireland) will make the application highly scalable.  |
 | They want to go live in Azure within 9 months.   | Go-live can occur within 3 months by leveraging the recommendations above.  |
 
+
 ### High Level Solution Architecture
 
- The proposed design architecture provides a strategy to run an Azure App Service application in multiple regions to achieve high availability, improve user experience and provide a business continuity and disaster recovery plan.
+![Web App Migration Solution Architecture](https://user-images.githubusercontent.com/67944188/162164810-d7e41774-d30c-4e49-9fc9-e5a844b5a9ec.png)
+
+Please note that the PDF version is in the architecture design folder.
+
+The proposed design architecture provides a strategy to run an Azure App Service application in multiple regions to achieve high availability, improve user experience and provide a business continuity and disaster recovery plan.
 There are several general approaches to achieve high availability across regions:
 * Active/Passive with hot standby: traffic goes to one region, while the other waits on hot standby. Hot standby means the VMs in the secondary region are allocated and running at all times.
 * Active/Passive with cold standby: traffic goes to one region, while the other waits on cold standby. Cold standby means the VMs in the secondary region are not allocated until needed for failover. This approach costs less to run but will generally take longer to come online during a failure.
 * Active/Active: both regions are active, and requests are load balanced between them. If one region becomes unavailable, it is taken out of rotation.
-* The Active/passive with hot standby approach is recommended as it provides the best proven practices for improving scalability and performance in an Azure App Service web application.
+
+The Active/passive with hot standby approach is recommended as it provides the best proven practices for improving scalability and performance in an Azure App Service web application.
 
 ### Workflow
 A multi-region architecture can provide higher availability than deploying to a single region. If a regional outage affects the primary region, you can use Front Door to fail over to the secondary region. This architecture can also help if an individual subsystem of the application fails.
@@ -179,3 +185,5 @@ There are two types of throughput that can be provisioned in Cosmos DB, standard
 5.	Browse to the application
 6.	Configure and view application logs
 7.	Inspect deployed files using Kudu
+
+Next Steps
