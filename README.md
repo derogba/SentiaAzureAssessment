@@ -186,4 +186,20 @@ There are two types of throughput that can be provisioned in Cosmos DB, standard
 6.	Configure and view application logs
 7.	Inspect deployed files using Kudu
 
-Next Steps
+
+### ARM Templates
+The templates creates an Azure Cosmos account and Azure Web App. This sample is useful where you want to deploy these resources and have the web app automatically connect to Cosmos DB in a single operation without having to manually add connection information to Application Settings in the portal.
+The following parameters which configured in the parameters file including:
+•	Application Name: Pick a name that will be used for the Cosmos account, App Plan and Web App.
+•	Location: Azure region for all the resources.
+•	App Service Plan Tier: App Service Plan's pricing tier.
+•	App Service Plan Instances: App Service Plan's instance count.
+•	Database Name: The Cosmos DB database name.
+
+
+### Next Steps
+
+Azure Migrate for all your needs
+ 
+The App Service migration assistant—a fast, free, and automated way to migrate web apps with minimal or no code changes. Run readiness checks and get potential remediation steps for common issues. Receive step-by-step guidance for moving your web app to App Service.
+
