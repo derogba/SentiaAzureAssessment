@@ -106,11 +106,6 @@ Benefits of doing so include:
 * In most cases, regional pairs reside within the same geography to meet data residency requirements.
 
 **Resource groups.** The primary region, secondary region, and Traffic Manager will be placed in separate resource groups. This will ensure that the resources deployed to each region are managed as a single collection.
-<<<<<<< HEAD
-
-## Front Door configuration
-=======
->>>>>>> 9511672c665329b007a95397878f7fec03671076
 
 **Routing.** Front Door supports several routing mechanisms. For our design, the priority routing setting will be used as it enables Front Door to send all requests to the primary region unless the endpoint for that region becomes unreachable. At that point, it automatically fails over to the secondary region.
 
