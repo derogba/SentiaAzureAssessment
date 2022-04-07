@@ -77,10 +77,7 @@ on
 
 <span style="color:blue">Azure Front Door</span> is a layer 7 load balancer. In this architecture, it routes HTTP requests to the web front end. Front Door also provides a web application firewall (WAF) that protects the application from common exploits and vulnerabilities.
 
-
-<span style="color:blue">Azure AppService</span> Quickly build, deploy, and scale web apps and APIs on your terms. Work with .NET, .NET Core, Node.js, Java, Python, or PHP in containers, or running on Windows or Linux. Meet rigorous, enterprise-grade performance, and security and compliance requirements with a trusted, fully managed service that handles more than 60 billion requests per day.
-
-<span style="color:blue">Azure Function</span> are used to run background tasks. Functions are invoked by a trigger, such as a timer event or a message being placed on queue.
+<span style="color:blue">some *blue* Azure Function</span>.are used to run background tasks. Functions are invoked by a trigger, such as a timer event or a message being placed on queue.
 
 <span style="color:blue">Queue</span> the application queues background tasks by putting a message onto an Azure Service Bus queue. The message triggers a function app.
 
@@ -96,31 +93,30 @@ on
 
 ### Recommendations
 
-## Regional pairing.
-Each Azure region is paired with another region within the same geography. In this case West Europe (Netherland) is paired with North Europe (Ireland).
+**Regional pairing.**Each Azure region is paired with another region within the same geography. In this case West Europe (Netherland) is paired with North Europe (Ireland).
 
 Benefits of doing so include:
 * If there is a broad outage, recovery of at least one region out of every pair is prioritized.
 * Planned Azure system updates are rolled out to paired regions sequentially to minimize possible downtime.
 * In most cases, regional pairs reside within the same geography to meet data residency requirements.
 
-## Resource groups. 
-The primary region, secondary region, and Traffic Manager will be placed in separate resource groups. This will ensure that the resources deployed to each region are managed as a single collection.
+**Resource groups.**The primary region, secondary region, and Traffic Manager will be placed in separate resource groups. This will ensure that the resources deployed to each region are managed as a single collection.
 
 ## Front Door configuration
-Routing. Front Door supports several routing mechanisms. For our design, the priority routing setting will be used as it enables Front Door to send all requests to the primary region unless the endpoint for that region becomes unreachable. At that point, it automatically fails over to the secondary region.
-Health probe. Front Door uses an HTTP (or HTTPS) probe to monitor the availability of each back end. The probe gives Front Door a pass/fail test for failing over to the secondary region. 
+
+**Routing.**Front Door supports several routing mechanisms. For our design, the priority routing setting will be used as it enables Front Door to send all requests to the primary region unless the endpoint for that region becomes unreachable. At that point, it automatically fails over to the secondary region.
+
+**Health probe.**Front Door uses an HTTP (or HTTPS) probe to monitor the availability of each back end. The probe gives Front Door a pass/fail test for failing over to the secondary region. 
 
 As a best practice, create a health probe path in your application backend that reports the overall health of the application. This health probe should check critical dependencies such as the App Service apps, storage queue, and SQL Database. 
 
-## Cosmos DB. 
-Cosmos DB supports geo-replication across regions in active-active pattern with multiple write regions. 
+**Cosmos DB.**Cosmos DB supports geo-replication across regions in active-active pattern with multiple write regions. 
  
 ## Note
 All the replicas belong to the same resource group.
 
-## Storage.
-For Azure Storage, read-access geo-redundant storage (RA-GRS) is recommended. With RA-GRS storage, data is replicated to a secondary region. If there is a regional outage or disaster, the Storage administrator can decide to perform a geo-failover to the secondary region. 
+**Storage.**For Azure Storage, read-access geo-redundant storage (RA-GRS) is recommended. With RA-GRS storage, data is replicated to a secondary region. If there is a regional outage or disaster, the Storage administrator can decide to perform a geo-failover to the secondary region. 
+
 For Queue storage, create a backup queue in the secondary region. During failover, the app can use the backup queue until the primary region becomes available again. That way, the application can still process new requests.
 
 ### Considerations
@@ -132,22 +128,25 @@ For Queue storage, create a backup queue in the secondary region. During failove
 <span style="color:blue">CosmosDB</span> RPO and recovery time objective (RTO) for Cosmos DB provide trade-offs between availability, data durability, and throughput. Cosmos DB provides a minimum RTO of 0 for a relaxed consistency level with multi-master or an RPO of 0 for strong consistency with single-master.
 
 <span style="color:blue">Storage.</span> RA-GRS storage provides durable storage, but it's important to understand what can happen during an outage:
+
 * If a storage outage occurs, there will be a period of time when you don't have write-access to the data. You can still read from the secondary endpoint during the outage.
 * If a regional outage or disaster affects the primary location and the data there cannot be recovered, the Azure Storage team may decide to perform a geo-failover to the secondary region.
 * Data replication to the secondary region is performed asynchronously. Therefore, if a geo-failover is performed, some data loss is possible if the data can't be recovered from the primary region.
 * Transient failures, such as a network outage, will not trigger a storage failover. Design your application to be resilient to transient failures. Mitigation options include:
-o	Read from the secondary region.
-o	Temporarily switch to another storage account for new write operations (for example, to queue messages).
-o	Copy data from the secondary region to another storage account.
-o	Provide reduced functionality until the system fails back.
 
-Manageability
+    * Read from the secondary region.
+    * Temporarily switch to another storage account for new write operations (for example, to queue messages).
+    * Copy data from the secondary region to another storage account.
+    * Provide reduced functionality until the system fails back.
+
+## Manageability
 If the primary database fails, perform a manual failover to the secondary database. The secondary database remains read-only until you fail over.
-DevOps
+
+## DevOps
 This architecture follows the multi region deployment recommendation, described in the DevOps section of the Azure Well Architected Framework.
 This architecture builds on the one shown in Improve scalability in a web application, see DevOps considerations section.
 
-Monitoring
+## Monitoring
 A recommended practice is adding Application Insights to your code during development using the Application Insights SDKs and customizing per application. These open-source SDKs are available for most application frameworks. To enrich and control the data you collect, incorporate the use of the SDKs both for testing and production deployments into your development process. 
 Like Application Insights, Log Analytics provides tools for analyzing data across sources, creating complex queries, and sending proactive alerts on specified conditions. You can also view telemetry in the Azure portal. Log Analytics adds value to existing monitoring services such as Azure Monitor and can also monitor on-premises environments.
 Both Application Insights and Log Analytics use Azure Log Analytics Query Language. You can also use cross-resource queries to analyze the telemetry gathered by Application Insights and Log Analytics in a single query.
