@@ -35,8 +35,7 @@ The NodeJS application will be hosted in Azure App Service, which supports hosti
 | Requirement  | Recommendation  |
 |---|---|
 | Consider OS level access in the developed solution   |Deploy Azure Wep App to leverage the maximum potential high availability, scalability, and performance within with Azure. Reduce administrative overhead of managing virtual machines   |
-|Retaining MongoDB as the database technology.   | Deploy CosmosDB.
-Azure Cosmos DB API for MongoDB makes it easy to use Cosmos DB as if it were a MongoDB database. You can leverage your MongoDB experience and continue to use your favorite MongoDB drivers, SDKs, and tools by pointing your application to the API for MongoDB account's connection string.  |
+|Retaining MongoDB as the database technology.   | Deploy CosmosDB. Azure Cosmos DB API for MongoDB makes it easy to use Cosmos DB as if it were a MongoDB database. You can leverage your MongoDB experience and continue to use your favorite MongoDB drivers, SDKs, and tools by pointing your application to the API for MongoDB account's connection string.|
 | Processes generating PDF files which are stored locally.  |  Azure Files take advantage of fully managed file shares in the cloud that are accessible via the industry-standard SMB and NFS protocols. Azure Files shares can be mounted concurrently by cloud or on-premises deployments of Windows, Linux, and macOS. Azure Files shares can also be cached on Windows Servers with Azure File Sync for fast access near where the data is being used. |
 |The finance team needs to have access to these files via FTP.    | Azure Files take advantage of fully managed file shares in the cloud that are accessible via the industry-standard SMB and NFS protocols. Azure Files shares can be mounted concurrently by cloud or on-premises deployments of Windows, Linux, and macOS. Azure Files shares can also be cached on Windows Servers with Azure File Sync for fast access near where the data is being used.  |
 | All services are hosted on several virtual machines.  |App Service plan provides the managed virtual machines (VMs) that host your app. All apps associated with a plan run on the same VM instances.   |
@@ -93,20 +92,20 @@ on
 
 ### Recommendations
 
-**Regional pairing.**Each Azure region is paired with another region within the same geography. In this case West Europe (Netherland) is paired with North Europe (Ireland).
+**Regional pairing.** Each Azure region is paired with another region within the same geography. In this case West Europe (Netherland) is paired with North Europe (Ireland).
 
 Benefits of doing so include:
 * If there is a broad outage, recovery of at least one region out of every pair is prioritized.
 * Planned Azure system updates are rolled out to paired regions sequentially to minimize possible downtime.
 * In most cases, regional pairs reside within the same geography to meet data residency requirements.
 
-**Resource groups.**The primary region, secondary region, and Traffic Manager will be placed in separate resource groups. This will ensure that the resources deployed to each region are managed as a single collection.
+**Resource groups.** The primary region, secondary region, and Traffic Manager will be placed in separate resource groups. This will ensure that the resources deployed to each region are managed as a single collection.
 
 ## Front Door configuration
 
-**Routing.**Front Door supports several routing mechanisms. For our design, the priority routing setting will be used as it enables Front Door to send all requests to the primary region unless the endpoint for that region becomes unreachable. At that point, it automatically fails over to the secondary region.
+**Routing.** Front Door supports several routing mechanisms. For our design, the priority routing setting will be used as it enables Front Door to send all requests to the primary region unless the endpoint for that region becomes unreachable. At that point, it automatically fails over to the secondary region.
 
-**Health probe.**Front Door uses an HTTP (or HTTPS) probe to monitor the availability of each back end. The probe gives Front Door a pass/fail test for failing over to the secondary region. 
+**Health probe.** Front Door uses an HTTP (or HTTPS) probe to monitor the availability of each back end. The probe gives Front Door a pass/fail test for failing over to the secondary region. 
 
 As a best practice, create a health probe path in your application backend that reports the overall health of the application. This health probe should check critical dependencies such as the App Service apps, storage queue, and SQL Database. 
 

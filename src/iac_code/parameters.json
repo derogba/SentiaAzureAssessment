@@ -2,41 +2,26 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "subscriptionId": {
-            "value": "d80804fb-4f89-418d-8784-486967f5fae3"
-        },
         "name": {
-            "value": "sentiaApp"
+            "value": "sentia-webappmigration-assessment-db-345"
         },
         "location": {
-            "value": "West Europe"
+            "value": "westus"
         },
-        "hostingPlanName": {
-            "value": "ASP-NetworkWatcherRG-a864"
+        "locationName": {
+            "value": "West US"
         },
-        "serverFarmResourceGroup": {
-            "value": "NetworkWatcherRG"
+        "defaultExperience": {
+            "value": "Azure Cosmos DB for MongoDB API"
         },
-        "alwaysOn": {
-            "value": true
+        "isZoneRedundant": {
+            "value": "false"
         },
-        "sku": {
-            "value": "PremiumV2"
+        "pairedLocation": {
+            "value": "eastus"
         },
-        "skuCode": {
-            "value": "P1v2"
-        },
-        "workerSize": {
-            "value": "3"
-        },
-        "workerSizeId": {
-            "value": "3"
-        },
-        "numberOfWorkers": {
-            "value": "1"
-        },
-        "linuxFxVersion": {
-            "value": "NODE|16-lts"
+        "pairedLocationName": {
+            "value": "East US"
         }
     }
 }
